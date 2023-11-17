@@ -12,7 +12,7 @@ simulate_game_random <- function() {
   stage2_a_catch_prob <- runif(1, 0.71, 0.75)
   stage2_a_words_per_catch <- 940
   
-  stage2_b_catch_prob <- runif(1, 0.64, 0.7)
+  stage2_b_catch_prob <- runif(1, 0.65, 0.69)
   stage2_b_words_per_catch <- 3750
   stage2_b_additional_turns <- 2
   
