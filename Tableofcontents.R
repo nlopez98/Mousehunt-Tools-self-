@@ -1,18 +1,21 @@
 # Part 1: Generic Start
-
+cat("Enter grammarian cr (e.g., 0.73): ");
+cr1 <- as.numeric(readLines("stdin",n=1));
+cat("Enter mythweaver cr (e.g., 0.67): ");
+cr2 <- as.numeric(readLines("stdin",n=1));
 # Function to simulate the game with increased randomness
 simulate_game_random <- function() {
-  # Stage 1 parameters with 4% randomness (use own cr, but make sure there's a gap of 0.04 for uncertainty)
-  stage1_catch_prob <- runif(1, 0.71, 0.75)
+  # Stage 1 parameters with 4% randomness
+  stage1_catch_prob <- runif(1, cr1-0.02, cr1+0.02)
   stage1_words_per_catch <- 940
   stage1_words_required <- 4000
   
-  # Stage 2 parameters with 4% randomness (use own cr, but make sure there's a gap of 0.04 for uncertainty)
+  # Stage 2 parameters with 4% randomness
   stage2_a_encounter_prob <- runif(1, 0.58, 0.62)
-  stage2_a_catch_prob <- runif(1, 0.71, 0.75)
+  stage2_a_catch_prob <- runif(1, cr1-0.02, cr1+0.02)
   stage2_a_words_per_catch <- 940
   
-  stage2_b_catch_prob <- runif(1, 0.65, 0.69)
+  stage2_b_catch_prob <- runif(1, cr2-0.02, cr2+0.02)
   stage2_b_words_per_catch <- 3750
   stage2_b_additional_turns <- 2
   
@@ -46,8 +49,8 @@ simulate_game_random <- function() {
     }
   }
   
-  return(c(volume = total_words / 4000, gnawbel_prize = (total_words / 4000) * 2*54, CC = (total_words / 4000) + 4, total_turns = total_turns))
-} #remove the 2 if toc4 not upgraded, change to 4 if event
+  return(c(volume = total_words / 4000, gnawbel_prize = (total_words / 4000) * 4*54, CC = (total_words / 4000) + 4, total_turns = total_turns))
+}
 
 # Simulate the game 50,000 times with increased randomness
 simulations_random <- replicate(50000, simulate_game_random())
@@ -89,20 +92,23 @@ cat("75th Percentile of Total Turns:", percentiles_turns_random[2], "\n")
 cat("\n")
 
 # Part 2: Startpoint
-
+cat("Enter starting words (e.g., 44100): ");
+a <- as.numeric(readLines("stdin",n=1));
+cat("Enter starting turns (e.g., 9): ");
+b <- as.numeric(readLines("stdin",n=1));
 # Function to simulate the game with increased randomness and starting from specific words and turns
 simulate_game_random_from_start <- function(starting_words, starting_turns) {
- # Stage 1 parameters with 4% randomness 
-  stage1_catch_prob <- runif(1, 0.71, 0.75)
+  # Stage 1 parameters with 4% randomness
+  stage1_catch_prob <- runif(1, cr1-0.02, cr1+0.02)
   stage1_words_per_catch <- 940
   stage1_words_required <- 4000
   
   # Stage 2 parameters with 4% randomness
   stage2_a_encounter_prob <- runif(1, 0.58, 0.62)
-  stage2_a_catch_prob <- runif(1, 0.71, 0.75)
+  stage2_a_catch_prob <- runif(1, cr1-0.02, cr1+0.02)
   stage2_a_words_per_catch <- 940
   
-  stage2_b_catch_prob <- runif(1, 0.65, 0.69)
+  stage2_b_catch_prob <- runif(1, cr2-0.02, cr2+0.02)
   stage2_b_words_per_catch <- 3750
   stage2_b_additional_turns <- 2
   
@@ -136,11 +142,11 @@ simulate_game_random_from_start <- function(starting_words, starting_turns) {
     }
   }
   
-  return(c(volume = total_words / 4000, gnawbel_prize = (total_words / 4000) * 2*54, CC = (total_words / 4000) + 4, total_turns = total_turns))
-} #same instructions as before
+  return(c(volume = total_words / 4000, gnawbel_prize = (total_words / 4000) * 4*54, CC = (total_words / 4000) + 4, total_turns = total_turns))
+}
 
 # Simulate the game 5000 times starting from given point
-simulations_random_start <- replicate(50000, simulate_game_random_from_start(44100,9)) #replace with (points, turns left)
+simulations_random_start <- replicate(50000, simulate_game_random_from_start(a,b))
 
 # Extract parameters from simulations
 volume_random_start <- simulations_random_start[1,]
