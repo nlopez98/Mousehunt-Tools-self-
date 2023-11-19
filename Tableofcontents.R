@@ -50,7 +50,7 @@ simulate_game_random <- function() {
   }
   
   return(c(volume = total_words / 4000, gnawbel_prize = (total_words / 4000) * 4*54, CC = (total_words / 4000) + 4, total_turns = total_turns))
-}
+} #change to *2 if no event and remove if toc4 not upgraded
 
 # Simulate the game 50,000 times with increased randomness
 simulations_random <- replicate(50000, simulate_game_random())
