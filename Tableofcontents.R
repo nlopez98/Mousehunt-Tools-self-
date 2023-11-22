@@ -3,6 +3,8 @@ cat("Enter grammarian cr (e.g., 0.73): ");
 cr1 <- as.numeric(readLines("stdin",n=1));
 cat("Enter mythweaver cr (e.g., 0.67): ");
 cr2 <- as.numeric(readLines("stdin",n=1));
+cat("Simulating games...")
+cat("\n")
 # Function to simulate the game with increased randomness
 simulate_game_random <- function() {
   # Stage 1 parameters with 4% randomness
@@ -50,7 +52,7 @@ simulate_game_random <- function() {
   }
   
   return(c(volume = total_words / 4000, gnawbel_prize = (total_words / 4000) * 4*54, CC = (total_words / 4000) + 4, total_turns = total_turns))
-} #change to *2 if no event and remove if toc4 not upgraded
+}
 
 # Simulate the game 50,000 times with increased randomness
 simulations_random <- replicate(50000, simulate_game_random())
@@ -96,6 +98,41 @@ cat("Enter starting words (e.g., 44100): ");
 a <- as.numeric(readLines("stdin",n=1));
 cat("Enter starting turns (e.g., 9): ");
 b <- as.numeric(readLines("stdin",n=1));
+cat("Simulating current game...")
+cat("\n")
+
+#count change to find total turns
+find_unique_way_to_make_change <- function(amount, denom1, denom2) {
+  # Check if the amount is divisible by denom1
+  if (amount %% denom1 == 0) {
+    return(c(amount / denom1, 0))  # Return the number of denom1 coins and 0 denom2 coins
+  }
+  
+  # Check if the amount is divisible by denom2
+  if (amount %% denom2 == 0) {
+    return(c(0, amount / denom2))  # Return 0 denom1 coins and the number of denom2 coins
+  }
+  
+  # Iterate through the possible number of denom1 coins
+  for (num_denom1 in 0:(amount %/% denom1)) {
+    # Calculate the remaining amount after using denom1 coins
+    remaining_amount <- amount - num_denom1 * denom1
+    
+    # Check if the remaining amount is divisible by denom2
+    if (remaining_amount %% denom2 == 0) {
+      # Return the combination of denom1 and denom2 coins
+      return(c(num_denom1, remaining_amount / denom2))
+    }
+  }
+  
+  # If no combination is found, return NULL
+  return(NULL)
+}
+
+unique_way <- find_unique_way_to_make_change(a, 940, 3750)
+mythweavers <- unique_way[2]
+
+
 # Function to simulate the game with increased randomness and starting from specific words and turns
 simulate_game_random_from_start <- function(starting_words, starting_turns) {
   # Stage 1 parameters with 4% randomness
@@ -115,7 +152,7 @@ simulate_game_random_from_start <- function(starting_words, starting_turns) {
   # Simulation
   total_words <- starting_words
   turns_left <- starting_turns
-  total_turns <- 25
+  total_turns <- 25 + mythweavers*2
   
   # Stage 1
   while (total_words < stage1_words_required && turns_left > 0) {
@@ -179,6 +216,10 @@ cat("Median CC (starting from specific words and turns):", median_CC_random_star
 cat("25th Percentile of CC:", percentiles_CC_random_start[1], "\n")
 cat("75th Percentile of CC:", percentiles_CC_random_start[2], "\n")
 cat("\n")
+cat("Median total turns (starting from specific words and turns):", median_turns_random_start, "\n")
+cat("25th Percentile of turns:", percentiles_turns_random_start[1], "\n")
+cat("75th Percentile of total turns:", percentiles_turns_random_start[2], "\n")
+
 
 # Simulate the game starting from a clean slate 5000 times
 clean_slate_runs <- simulations_random
@@ -230,7 +271,7 @@ abline(v = specific_run["CC"], col = "red", lty = 1)
 
 # Plot Total Turns histogram
 hist(total_turns_random, main = "Total Turns", xlab = "Total Turns", col = "lightgoldenrodyellow", border = "black")
-#abline(v = specific_run["total_turns"], col = "red", lty = 1)
+abline(v = specific_run["total_turns"], col = "red", lty = 1)
 #text(x = specific_run["total_turns"], y = max(table(total_turns_random)) + 0.1, "Specific Run", pos = 2, col = "red")
 
 # Reset plot layout
