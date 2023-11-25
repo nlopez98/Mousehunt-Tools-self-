@@ -95,7 +95,7 @@ simulate_game_random_from_start <- function(starting_words, starting_turns) {
   }
   
   return(c(volume = total_words / 4000, gnawbel_prize = (total_words / 4000) * 4*54, CC = (total_words / 4000) + 4, total_turns = total_turns))
-}
+} #prizes replace 4 with 2 if normal condition, 1 if no TOC4
  
 # Simulate the game 50000 times from start with increased randomness
 simulations_random <- replicate(50000, simulate_game_random_from_start(0,25))
