@@ -10,7 +10,6 @@ cat("Enter starting turns (e.g., 9): ");
 b <- as.numeric(readLines("stdin",n=1));
 cat("Simulating games...", "\n")
 
-
 #count change to find total turns
 find_unique_way_to_make_change <- function(amount, denom1, denom2) {
   # Check if the amount is divisible by denom1
@@ -43,6 +42,7 @@ unique_way <- find_unique_way_to_make_change(a, 940, 3750)
 mythweavers <- unique_way[2]
 cat("Mythweavers so far:", mythweavers, "\n")
 cat("\n")
+
 #Part 2: Simulations
 # Function to simulate the game with increased randomness and starting from specific words and turns. If input is (0,25), simulate from start
 simulate_game_random_from_start <- function(starting_words, starting_turns) {
@@ -63,10 +63,10 @@ simulate_game_random_from_start <- function(starting_words, starting_turns) {
   # Simulation
   total_words <- starting_words
   turns_left <- starting_turns
-   if (!is.null(mythweavers)) {
+  if (!is.null(mythweavers) && starting_words != 0 && starting_turns != 25) {
     total_turns <- 25 + mythweavers * 2
   } else {
-    total_turns <- 25
+    total_turns <- starting_turns
   }
   
   # Stage 1
@@ -95,8 +95,8 @@ simulate_game_random_from_start <- function(starting_words, starting_turns) {
   }
   
   return(c(volume = total_words / 4000, gnawbel_prize = (total_words / 4000) * 4*54, CC = (total_words / 4000) + 4, total_turns = total_turns))
-} #prizes replace 4 with 2 if normal condition, 1 if no TOC4
- 
+}
+
 # Simulate the game 50000 times from start with increased randomness
 simulations_random <- replicate(50000, simulate_game_random_from_start(0,25))
 
@@ -215,7 +215,7 @@ if (percentile_specific_run > 50) {
   cat(sprintf("Your specific run is performing below median clean slate runs, at %.2f percentile, and you will reach %.2f words.\n", percentile_specific_run, specific_run["volume"] * 4000))
 }
 # Plot histograms
-
+#pdf(file = NULL)
 par(mfrow = c(2, 2))
 par(mar = c(4, 4, 2, 1))
 
